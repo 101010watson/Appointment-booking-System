@@ -1,0 +1,108 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body{
+    padding: 0;
+    font-family: roboto,sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+.content{
+    display: flex;
+    flex: 1;
+}
+.content h2{
+    color:rgb(57, 92, 231) ;
+    font-weight: 900;
+}
+.loginPanel{
+    flex: 1;
+    padding-top: 100px;
+    padding-left:50px ;
+    padding-right: 40px;
+}
+.textInput{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.textInput input{
+    width: 400px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0 15px;
+    font-size: 16px;
+}
+.remForgot .rem{
+    margin-right: auto;
+}
+.remForgot{
+    color: rgb(160, 158, 158);
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+.remForgot p{
+    margin: 0;
+}
+.login, .signUp{
+    border-radius: 2px;
+}
+.login{
+    border:none;
+    background-color: rgb(49, 96, 215);
+    color: white;
+    margin-right: 20px;
+    padding: 17px 40px 17px 40px;
+}
+.signUp{
+    border: solid 2px;
+    background-color: white;
+    border-color: rgb(49, 96, 215);
+    color: rgb(49, 96, 215);
+    padding: 15px 38px 15px 38px;
+}
+
+.picturePanel{
+    display: flex;
+    background-color: rgb(49, 96, 215);
+    flex-direction: column;
+    justify-content: space-between;
+}
+ul{
+    display: flex;
+    gap: 70px;
+}
+ul li{
+    margin-top: 5px;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+    list-style-type:none;
+}
+
+#themeToggle{
+    margin-left: auto;
+    margin-right: 10px;
+    background:transparent;
+    border: none;
+}
+#themeToggle img{
+    width: 35px;
+}
+
+.footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(195, 194, 194);
+    padding: 10px;
+}
+
+img{
+    max-width: 900px;
+}
