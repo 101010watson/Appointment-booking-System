@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="header">
+        <img src="./images/plus.svg" alt="health sign plus">
+        <p>Patient Dashboard</p>
+        <i class='bx bxs-moon'></i>
+    </div>
+    <div class="content">
+
+        <div class="navPanel">
+            <ul>
+                <li class="homeTab"> <a href="#"><i class='bx bxs-home'></i></a>Dashboard</li>
+                <li class="appointmentsTab"> <a href="#"><i class='bx bx-plus-medical'></i></a>Doctors</li>
+                <li class="profileTab"> <a href="#"><i class='bx bxs-user'></i></a>Profile</li>
+                <li class="settingsTab"> <a href="#"><i class='bx bxs-cog' ></i></a>Settings</li>
+            </ul>
+        </div>
+
+        <div class="rightPanel">
+            <div class="forSymptoms">
+                <label for="symptoms">Select your symptoms :-</label>
+                <select name="symptoms" id="selectSymptoms">
+                    <option value="" disabled selected>Choose symptoms </option>
+                    <option value="1">elevated body temperatures</option>
+                    <option value="2">body pain</option>
+                    <option value="3">ear pain</option>
+                </select>
+            </div>
+
+            <div class="forLocation">
+                <label for="locations">Choose a nearby location :-</label>
+                <input type="text" class="selectLocation" placeholder="type your location">
+            </div>
+
+            <div class="contact">
+                <button>Contact doctors</button>
+            </div>
+            
+        </div>
+    </div>
+    
+</body>
+</html>
