@@ -5,8 +5,8 @@ redirectToDoc.addEventListener('click',(e)=>{
 
     if(!target) return;
 
-    if(target.classList.contains("appointmentsTab")){
-        window.location.assign("../doctors/index.html");
+    if(target.classList.contains("homeTab")){
+        window.location.assign("../dashboard/index.html");
     }
     else if(target.classList.contains("profileTab")){
         window.location.assign("../profile/index.html");

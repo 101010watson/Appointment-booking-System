@@ -11,11 +11,11 @@ redirectToDoc.addEventListener('click',(e)=>{
     else if(target.classList.contains("profileTab")){
         window.location.assign("../profile/index.html");
     }
-    else if(target.classList.contains("settingsTab")){
-        window.location.assign("../settings/index.html");
+    else if(target.classList.contains("homeTab")){
+        window.location.assign("../dashboard/index.html");
     }
-
 });
+
 
 let darkMode = localStorage.getItem("darkMode");
 const themeSwitch = document.querySelector('#theme-switch');

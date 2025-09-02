@@ -99,7 +99,6 @@ p{
 .navPanel ul{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 20px;
     padding-right: 20px;
     padding-left: 20px;
@@ -120,25 +119,25 @@ p{
     margin-right: 10px;
 }
 
+.homeTab:hover,
 .appointmentsTab:hover,
-.profileTab:hover,
 .settingsTab:hover{
     background-color: var(--hover-color);
 }
-.homeTab{
+.profileTab{
     background-color: var(--primary-color);
     color: var(--base-color);
     padding: 10px;
     border-radius: 5px;
 }
-.homeTab i{
+.profileTab i{
     color: var(--base-color);
 }
 .navPanel a{
     margin-right: 10px;
 }
 
-.navPanel .appointmentsTab, .profileTab, .settingsTab{
+ .appointmentsTab, .homeTab, .settingsTab{
     color: var(--text-color);
 }
 
