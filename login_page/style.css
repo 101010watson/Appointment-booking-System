@@ -10,6 +10,17 @@ body{
     justify-content: space-between;
     min-height: 100vh;
 }
+:root{
+    --base-color:white;
+    --theme-switch:rgb(163, 160, 160);
+    --text-color:black;
+}
+
+.darkMode{
+    --base-color:rgb(37, 36, 36);
+    --theme-switch:rgb(53, 52, 52);
+    --text-color:rgb(124, 123, 123);
+}
 .content{
     display: flex;
     flex: 1;
@@ -19,6 +30,7 @@ body{
     font-weight: 900;
 }
 .loginPanel{
+    background-color: var(--base-color);
     padding-top: 100px;
     padding-left:50px ;
     padding-right: 40px;
@@ -103,14 +115,32 @@ ul li{
     list-style-type:none;
 }
 
-#themeToggle{
-    margin-left: auto;
-    margin-right: 10px;
-    background:transparent;
+#theme-switch{
     border: none;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--theme-switch);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.1s ease;
 }
-#themeToggle img{
-    width: 35px;
+
+#theme-switch svg{
+    fill: var(--text-color);
+}
+
+#theme-switch svg:last-child{
+    display: none;
+}
+.darkMode #theme-switch svg:first-child{
+    display: none;
+}
+.darkMode #theme-switch svg:last-child{
+    display: block;
 }
 
 .footer{
@@ -136,4 +166,8 @@ nav ul li:active{
 
 .home{
     text-decoration: underline;
+}
+
+.loginWith-text, a{
+    color: var(--text-color);
 }
