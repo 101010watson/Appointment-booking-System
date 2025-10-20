@@ -6,6 +6,50 @@ const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Reset Password
+router.post('/reset-password', [
+  body('email').isEmail().normalizeEmail(),
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // For security reasons, don't reveal whether the user exists
+      return res.status(200).json({ 
+        message: 'If an account exists with this email, you will receive password reset instructions.'
+      });
+    }
+
+    // Generate a password reset token
+    const resetToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Save the reset token and its expiry to the user document
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    // In a real application, you would send an email here
+    // For now, we'll just return success
+    res.status(200).json({
+      message: 'If an account exists with this email, you will receive password reset instructions.'
+    });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Server error during password reset request' });
+  }
+});
+
 // Register
 router.post('/register', [
   body('email').isEmail().normalizeEmail(),

@@ -48,16 +48,18 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const resetPassword = async (email) => {
+    try {
+      const response = await apiService.resetPassword(email);
+      return response;
+    } catch (error) {
+      throw new Error(error.message || 'Failed to reset password');
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      profile: user, // Add profile alias for compatibility
-      loading, 
-      signUp, 
-      signIn, 
-      signOut 
-    }}>
-      {children}
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

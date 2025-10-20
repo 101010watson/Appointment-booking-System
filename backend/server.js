@@ -10,7 +10,10 @@ const userRoutes = require('./routes/users');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -27,7 +30,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/users', userRoutes);
 
-// Health check
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Server is running' });
+});
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running', timestamp: new Date().toISOString() });
 });

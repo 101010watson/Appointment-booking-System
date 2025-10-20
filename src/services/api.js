@@ -21,6 +21,7 @@ class ApiService {
         'Content-Type': 'application/json',
         ...options.headers,
       },
+      credentials: 'include',
       ...options,
     };
 
@@ -35,16 +36,30 @@ class ApiService {
     try {
       const response = await fetch(url, config);
       
-      // Check if response is JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Backend server is not running. Please start the backend server first.');
+      // First check if the server is reachable
+      if (!response) {
+        throw new Error('Cannot connect to the server. Please check if the backend server is running.');
       }
 
-      const data = await response.json();
+      // Try to parse JSON response
+      let data;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+        } catch (e) {
+          throw new Error('Invalid response from server');
+        }
+      } else {
+        // If response is not JSON, check if it's a server error
+        if (!response.ok) {
+          throw new Error('Server error: ' + response.status);
+        }
+        return response;
+      }
 
       if (!response.ok) {
-        console.error('API Error:', data); // Debug log
+        console.error('API Error:', data);
         throw new Error(data.message || data.errors?.[0]?.msg || 'Something went wrong');
       }
 
@@ -77,8 +92,25 @@ class ApiService {
   }
 
   // Appointment methods
-  async getAppointments() {
-    return this.request('/appointments');
+  async getCurrentUser() {
+    return this.request('/users/current', {
+      method: 'GET',
+    });
+  }
+
+  async resetPassword(email) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: { email }
+    });
+  }
+
+  // Appointments
+  async getAppointments(filters = {}) {
+    const queryString = new URLSearchParams(filters).toString();
+    return this.request(`/appointments?${queryString}`, {
+      method: 'GET',
+    });
   }
 
   async createAppointment(appointmentData) {

@@ -26,7 +26,9 @@ const userSchema = new mongoose.Schema({
   specialization: String, // for doctors
   licenseNumber: String, // for doctors
   dateOfBirth: Date, // for patients
-  address: String
+  address: String,
+  resetToken: String,
+  resetTokenExpiry: Date
 }, {
   timestamps: true
 });
