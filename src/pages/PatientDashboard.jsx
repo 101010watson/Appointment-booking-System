@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import { appointments as appointmentsApi, doctors as doctorsApi } from '../lib/api';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -36,28 +36,21 @@ export const PatientDashboard = () => {
   };
 
   const loadAppointments = async () => {
-    const { data, error } = await supabase
-      .from('appointments')
-      .select(`
-        *,
-        doctor:doctor_id(id, full_name, email, specialization)
-      `)
-      .eq('patient_id', profile?.id)
-      .order('appointment_date', { ascending: false });
-
-    if (error) throw error;
-    setAppointments(data || []);
+    try {
+      const data = await appointmentsApi.list();
+      setAppointments(data);
+    } catch (err) {
+      console.error('Error loading appointments:', err);
+    }
   };
 
   const loadDoctors = async () => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'doctor')
-      .order('full_name');
-
-    if (error) throw error;
-    setDoctors(data || []);
+    try {
+      const data = await doctorsApi.list();
+      setDoctors(data);
+    } catch (err) {
+      console.error('Error loading doctors:', err);
+    }
   };
 
   const handleBookAppointment = async (e) => {
@@ -65,16 +58,12 @@ export const PatientDashboard = () => {
     setError('');
 
     try {
-      const { error } = await supabase.from('appointments').insert({
-        patient_id: profile?.id,
-        doctor_id: formData.doctor_id,
-        appointment_date: formData.appointment_date,
-        appointment_time: formData.appointment_time,
-        reason: formData.reason,
-        status: 'pending',
-      });
-
-      if (error) throw error;
+      await appointmentsApi.create(
+        formData.doctor_id,
+        formData.appointment_date,
+        formData.appointment_time,
+        formData.reason
+      );
 
       setFormData({
         doctor_id: '',
@@ -91,12 +80,7 @@ export const PatientDashboard = () => {
 
   const handleCancelAppointment = async (appointmentId) => {
     try {
-      const { error } = await supabase
-        .from('appointments')
-        .update({ status: 'cancelled' })
-        .eq('id', appointmentId);
-
-      if (error) throw error;
+      await appointmentsApi.update(appointmentId, 'cancelled', null);
       loadAppointments();
     } catch (err) {
       alert('Error cancelling appointment: ' + err.message);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import { appointments as appointmentsApi } from '../lib/api';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Calendar, Clock, User, Phone, Mail } from 'lucide-react';
@@ -17,17 +17,8 @@ export const DoctorDashboard = () => {
 
   const loadAppointments = async () => {
     try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .select(`
-          *,
-          patient:patient_id(id, full_name, email, phone, date_of_birth)
-        `)
-        .eq('doctor_id', profile?.id)
-        .order('appointment_date', { ascending: false });
-
-      if (error) throw error;
-      setAppointments(data || []);
+      const data = await appointmentsApi.list();
+      setAppointments(data);
     } catch (error) {
       console.error('Error loading appointments:', error);
     } finally {
@@ -37,12 +28,7 @@ export const DoctorDashboard = () => {
 
   const handleUpdateStatus = async (appointmentId, newStatus) => {
     try {
-      const { error } = await supabase
-        .from('appointments')
-        .update({ status: newStatus })
-        .eq('id', appointmentId);
-
-      if (error) throw error;
+      await appointmentsApi.update(appointmentId, newStatus, null);
       loadAppointments();
     } catch (error) {
       alert('Error updating appointment: ' + error.message);
@@ -54,12 +40,7 @@ export const DoctorDashboard = () => {
     if (notes === null) return;
 
     try {
-      const { error } = await supabase
-        .from('appointments')
-        .update({ notes })
-        .eq('id', appointmentId);
-
-      if (error) throw error;
+      await appointmentsApi.update(appointmentId, null, notes);
       loadAppointments();
     } catch (error) {
       alert('Error adding notes: ' + error.message);

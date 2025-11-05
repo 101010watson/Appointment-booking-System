@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { auth, setAuthToken } from '../lib/api';
 
 const AuthContext = createContext();
 
@@ -9,81 +9,59 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        loadProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await loadProfile(session.user.id);
-        } else {
-          setProfile(null);
-          setLoading(false);
-        }
-      })();
-    });
-
-    return () => subscription.unsubscribe();
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setAuthToken(token);
+      loadProfile();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  const loadProfile = async (userId) => {
+  const loadProfile = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) throw error;
-      setProfile(data);
+      const profileData = await auth.getProfile();
+      const userData = {
+        id: profileData.id,
+        email: profileData.email,
+      };
+      setUser(userData);
+      setProfile(profileData);
     } catch (err) {
       console.error('Error loading profile:', err);
+      localStorage.removeItem('authToken');
+      setAuthToken(null);
     } finally {
       setLoading(false);
     }
   };
 
   const signUp = async (email, password, profileData) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) throw error;
-    if (!data.user) throw new Error('User creation failed');
-
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .insert({
-        id: data.user.id,
-        email,
-        ...profileData,
-      });
-
-    if (profileError) throw profileError;
+    const result = await auth.signup(email, password, profileData.full_name, profileData.role, profileData);
+    const userData = {
+      id: result.user.id,
+      email: result.user.email,
+    };
+    setAuthToken(result.token);
+    setUser(userData);
+    setProfile(result.user);
   };
 
   const signIn = async (email, password) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) throw error;
+    const result = await auth.signin(email, password);
+    const userData = {
+      id: result.user.id,
+      email: result.user.email,
+    };
+    setAuthToken(result.token);
+    setUser(userData);
+    await loadProfile();
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    auth.logout();
+    setUser(null);
+    setProfile(null);
   };
 
   return (
