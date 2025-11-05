@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Card } from '../components/Card';
 import { Input } from '../components/Input';
@@ -78,6 +79,8 @@ export const Signup = ({ onNavigateToLogin }) => {
       setLoading(false);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center px-4 py-8">
@@ -204,7 +207,7 @@ export const Signup = ({ onNavigateToLogin }) => {
             <div className="text-center">
               <button
                 type="button"
-                onClick={onNavigateToLogin}
+                onClick={() => navigate('/login')}
                 className="text-blue-600 hover:text-blue-700 text-sm font-medium"
               >
                 Already have an account? Sign in

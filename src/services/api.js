@@ -92,11 +92,7 @@ class ApiService {
   }
 
   // Appointment methods
-  async getCurrentUser() {
-    return this.request('/users/current', {
-      method: 'GET',
-    });
-  }
+  // (no duplicate getCurrentUser) Appointment-related methods follow
 
   async resetPassword(email) {
     return this.request('/auth/reset-password', {

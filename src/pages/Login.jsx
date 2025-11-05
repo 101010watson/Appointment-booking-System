@@ -109,7 +109,7 @@ export const Login = ({ onNavigateToSignup }) => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={onNavigateToSignup}
+                  onClick={() => navigate('/signup')}
                   fullWidth
                 >
                   Sign Up

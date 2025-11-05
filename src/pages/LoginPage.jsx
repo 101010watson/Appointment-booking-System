@@ -87,7 +87,7 @@ export const LoginPage = ({ onNavigateToSignup }) => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={onNavigateToSignup}
+                  onClick={() => navigate('/signup')}
                   fullWidth
                 >
                   Sign Up
